@@ -42,7 +42,6 @@ from sklearn.svm import SVC
 from sklearn.metrics import classification_report
 
 import warnings
-
 warnings.simplefilter('ignore')
 
 
@@ -60,7 +59,7 @@ def load_data(database_filepath):
     
     """
     
-    # load data from database
+    # load data from SQL database
     engine = create_engine('sqlite:///' + database_filepath)
     df = pd.read_sql("SELECT * FROM DisasterResponse", engine)
     
@@ -71,7 +70,7 @@ def load_data(database_filepath):
     # save category names
     category_names = list(Y.columns.values)
     
-    return X,Y, category_names
+    return X, Y, category_names
 
 
 def tokenize(text):
@@ -98,6 +97,8 @@ def tokenize(text):
 
         # lemmatizer and lower
         clean_tok = lemmatizer.lemmatize(tok).lower().strip()
+
+        # append the cleaned tokens to the list
         clean_tokens.append(clean_tok)
 
     return clean_tokens
@@ -106,12 +107,13 @@ def tokenize(text):
 def build_model():
     
     """
-    Description: Build the machine learning pipeline model
+    Description: Build the machine learning model using TF-IDF pipeline
     
     Arguments: None
     
-    Return: the ML pipeline model which does the message classification
+    Return: the ML GridSearchCV model which does the message classification
     """
+
     #model = Pipeline([
         #('features', FeatureUnion([
 
@@ -125,19 +127,20 @@ def build_model():
         #('classifier', MultiOutputClassifier(AdaBoostClassifier()))
     #])
 
-    # the pipeline
+    # the TF-IDF pipeline
     pipeline = Pipeline([
                         ('vect', CountVectorizer(tokenizer=tokenize)),
                         ('tfidf', TfidfTransformer()),
                         ('clf', MultiOutputClassifier(RandomForestClassifier()))
                         ])
     
-    # parameter set
+    # parameter set for searchCV
     parameters = {'clf__estimator__min_samples_split': [2, 3, 4],
-                  'clf__estimator__n_estimators': [50, 100],
                   'clf__estimator__criterion': ['entropy', 'gini']
+                  'clf__estimator__n_estimators': [50, 100],
                  }
-
+    
+    # Gridsearch parameters
     model = GridSearchCV(pipeline, param_grid=parameters)
     
     return model
@@ -149,7 +152,7 @@ def evaluate_model(model, X_test, Y_test, category_names):
     Evaluate the ML pipeline accuracy
     
     Arguments:
-    model: the ML pipeline model
+    model: the ML GridSearchCV pipeline model
     X_test: Test features set
     Y_test: Test labels set
     category_names: label names
@@ -169,7 +172,7 @@ def save_model(model, model_filepath):
     model: Model to be saved
     model_filepath: path of the output pick file
     
-    Return: none, but a pickle file can be saved
+    Return: none, but a pickle file can be saved for the model
     '''
     
     pickle.dump(model, open(model_filepath, 'wb'))

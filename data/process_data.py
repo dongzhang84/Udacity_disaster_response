@@ -66,7 +66,7 @@ def clean_data(df):
     # concatenate the original dataframe with the new `categories` dataframe
     df = pd.concat([df,categories],axis=1)
     
-    # Remove rows with a related value of 2 from the dataset
+    # Remove rows with a related value of 2 from the dataset to keep binary values
     df = df[df['related'] != 2]
     
     return df
@@ -78,10 +78,13 @@ def save_data(df, database_filename):
     
     Arguments:
     df: the dataframe needs to be saved
+    database_filename: name of the saved SQLite database
     
     Return: None
     """ 
     engine = create_engine('sqlite:///' + database_filename)
+
+    # saved as DisasterResponse
     df.to_sql('DisasterResponse', engine, index=False, if_exists='replace')
 
 
@@ -89,9 +92,9 @@ def main():
 
     """
     Main function for the ETL pipeline:
-    -- Load Messages data combined with Categories
-    -- Clean the data
-    -- Save data to SQLite database
+    - Load messages data combined with categories
+    - clean the data
+    - save data to SQLite database
     """
 
 

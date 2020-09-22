@@ -62,12 +62,11 @@ def index():
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
 
+    # prepare the dataframe for the second graph
 
     # Calculate distribution of individual category with label = 1
     #cate_props = df.drop(['id', 'message', 'original', 'genre'], axis = 1).sum()/len(df)
     #cate_props = cate_props.rename(columns={'infrastructure_related: infra:related'})
-
-
 
     cate_props = df.drop(['id', 'message', 'original', 'genre'], axis = 1)\
            .rename(columns={'infrastructure_related':'infra_related', 
@@ -76,11 +75,7 @@ def index():
     cate_props = cate_props.sort_values(ascending = False)
     cate_values = list(cate_props.index)
 
-    #for value in cate_values:
-        #if len(value) > 8:
-            #value = value[:8]
-
-    print(cate_values)
+    #print(cate_values)
     
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
