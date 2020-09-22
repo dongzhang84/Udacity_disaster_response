@@ -3,7 +3,7 @@
 
 ### Description:
 
-In this project I built machine learning classification model to categorize messages to better understand disaster responses. I first built an ETL pipeline to extract data from messages and categories data, cleaned the data and saved to a SQLite database, then I used NLP to build a machine learning model to classify messages in many categories. Next I built a web application using Flask python. 
+In this project I built machine learning classification model to categorize messages to better understand disaster responses. I first built an ETL pipeline to extract data from messages and categories data, cleaned the data and saved to a SQLite database. Next I used Natural Language Processing (NLP) methods to build the machine learning model to classify messages in many categories. Then I built a web application using Flask python. 
 
 
 ### Installation
@@ -28,18 +28,18 @@ Also web application and data visualization tools:
 
 ### Files in the repository
 
-1. data:
+1. **data**:
 
 - disaster_categories.csv and disaster_messages.csv: datasets with all categories and messages
 - process_data.py: ETL pipeline to load, clean and save processed data into a SQL database
 - DisasterResponse.db: the saved result as a SQLite database.
 
-2. models:
+2. **models**:
 
 - train_classifier.py: machine learning classification pipeline to train the model, test the model accuracy, and save the model as a pickle file
 - classifier.pkl: output model as a pickle file
 
-3. app:
+3. **app**:
 
 - run.py: Flask python to run the web application locally, with two figures
 - templates: html files support the web application
@@ -64,15 +64,19 @@ Also web application and data visualization tools:
 
 Running train_classifier.py in terminal:
 
-[Screenshot](screenshot/train_classifier_result.png)
+![Screenshot](screenshot/train_classifier_result.png)
 
 The main webpage of the web application is
 
-[Screenshot](screenshot/cover_page.png)
+![Screenshot](screenshot/cover_page.png)
 
 Two examples of message classification:
 
-[Screenshot](screenshot/result1.png)
+The first example
 
-[Screenshot](screenshot/result2.png)
+![Screenshot](screenshot/result1.png)
+
+The second example
+
+![Screenshot](screenshot/result2.png)
 
