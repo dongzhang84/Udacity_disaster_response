@@ -1,7 +1,7 @@
 # Disaster Response Pipeline Project
 
 
-### Description:
+### Project Description:
 
 In this project I built machine learning classification model to categorize messages to better understand disaster responses. I first built an ETL pipeline to extract data from messages and categories data, cleaned the data and saved to a SQLite database. Next I used Natural Language Processing (NLP) methods to build the machine learning model to classify messages in many categories. Then I built a web application using Flask python. 
 
@@ -30,7 +30,7 @@ Also web application and data visualization tools:
 
 1. **data**:
 
-- disaster_categories.csv and disaster_messages.csv: datasets with all categories and messages
+- disaster_categories.csv and disaster_messages.csv: datasets with all categories and messages information
 - process_data.py: ETL pipeline to load, clean and save processed data into a SQL database
 - DisasterResponse.db: the saved result as a SQLite database.
 
@@ -45,13 +45,22 @@ Also web application and data visualization tools:
 - templates: html files support the web application
 
 
+4. **Notebooks**:
+
+- ETL_Pipeline_Preparation.ipynb: ETL piple notebook
+- ML_Pipeline_Preparation.ipynb: machine learning pipeline notebook
+
+
 ### Instructions:
 1. Run the following commands in the project's root directory to set up the database and model.
 
     - To run ETL pipeline that cleans data and stores in database
-        `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
+
+        `python3 data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
+
     - To run ML pipeline that trains classifier and saves
-        `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
+
+        `python3 models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
 
 2. Run the following command in the app's directory to run the web app.
     `python run.py`
