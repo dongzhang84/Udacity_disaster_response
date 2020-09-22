@@ -8,18 +8,37 @@ from nltk.tokenize import word_tokenize
 from flask import Flask
 from flask import render_template, request, jsonify
 from plotly.graph_objs import Bar
-from sklearn.externals import joblib
+import joblib as joblib
+#from sklearn.externals import joblib
 from sqlalchemy import create_engine
 
 
 app = Flask(__name__)
 
+
 def tokenize(text):
+    
+    """
+    Tokenize the text function
+    
+    Arguments: 
+    text: message which needs to be tokenized
+    
+    return:
+    clean_tokens: tokens extracted from the provided text/message
+    """
+    
+    # the word tokens from the provided message
     tokens = word_tokenize(text)
+
+    # Lemmanitizer
     lemmatizer = WordNetLemmatizer()
 
+    # List of clean tokens
     clean_tokens = []
     for tok in tokens:
+
+        # lemmatizer and lower
         clean_tok = lemmatizer.lemmatize(tok).lower().strip()
         clean_tokens.append(clean_tok)
 

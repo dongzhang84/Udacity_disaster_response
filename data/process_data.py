@@ -10,7 +10,7 @@ from sqlalchemy import create_engine
 
 def load_data(messages_filepath, categories_filepath):
     """
-    Load and messages and categories
+    Description: Load the messages and categories
     
     Arguments:
     messages_filepath: path of the messages csv file
@@ -32,7 +32,7 @@ def load_data(messages_filepath, categories_filepath):
 
 def clean_data(df):
     """
-    Clean dataframe df
+    Description: clean dataframe df
     
     Arguments: 
     df: dataframe needs to be cleaned 
@@ -74,7 +74,7 @@ def clean_data(df):
 
 def save_data(df, database_filename):
     """
-    Save cleaned dataframe df
+    Description: save cleaned dataframe df
     
     Arguments:
     df: the dataframe needs to be saved
@@ -86,6 +86,15 @@ def save_data(df, database_filename):
 
 
 def main():
+
+    """
+    Main function for the ETL pipeline:
+    -- Load Messages data combined with Categories
+    -- Clean the data
+    -- Save data to SQLite database
+    """
+
+
     if len(sys.argv) == 4:
 
         messages_filepath, categories_filepath, database_filepath = sys.argv[1:]

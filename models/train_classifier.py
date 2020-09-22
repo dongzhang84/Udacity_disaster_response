@@ -7,6 +7,8 @@ import re
 import pickle
 import nltk
 
+# import ssl
+
 import ssl
 
 try:
@@ -16,6 +18,8 @@ except AttributeError:
 else:
     ssl._create_default_https_context = _create_unverified_https_context
 
+# download nltk packages
+
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
@@ -24,6 +28,9 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem.porter import PorterStemmer
 from nltk.stem import WordNetLemmatizer
+
+
+# import sklearn packages
 
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
@@ -41,7 +48,7 @@ warnings.simplefilter('ignore')
 
 def load_data(database_filepath):
     """
-    Load and messages and categories
+    Load messages and categories data
     
     Arguments:
     database_filepath: path of the SQLite database
@@ -79,10 +86,17 @@ def tokenize(text):
     clean_tokens: tokens extracted from the provided text/message
     """
     
+    # the word tokens from the provided message
     tokens = word_tokenize(text)
+
+    # Lemmanitizer
     lemmatizer = WordNetLemmatizer()
+
+    # List of clean tokens
     clean_tokens = []
     for tok in tokens:
+
+        # lemmatizer and lower
         clean_tok = lemmatizer.lemmatize(tok).lower().strip()
         clean_tokens.append(clean_tok)
 
@@ -92,24 +106,39 @@ def tokenize(text):
 def build_model():
     
     """
-    Build the machine learning pipeline model
+    Description: Build the machine learning pipeline model
     
     Arguments: None
     
     Return: the ML pipeline model which does the message classification
     """
-    model = Pipeline([
-        ('features', FeatureUnion([
+    #model = Pipeline([
+        #('features', FeatureUnion([
 
-            ('text_pipeline', Pipeline([
-                ('count_vectorizer', CountVectorizer(tokenizer=tokenize)),
-                ('tfidf_transformer', TfidfTransformer())
-            ])),
+            #('text_pipeline', Pipeline([
+                #('count_vectorizer', CountVectorizer(tokenizer=tokenize)),
+                #('tfidf_transformer', TfidfTransformer())
+            #])),
 
-        ])),
+        #])),
 
-        ('classifier', MultiOutputClassifier(AdaBoostClassifier()))
-    ])
+        #('classifier', MultiOutputClassifier(AdaBoostClassifier()))
+    #])
+
+    # the pipeline
+    pipeline = Pipeline([
+                        ('vect', CountVectorizer(tokenizer=tokenize)),
+                        ('tfidf', TfidfTransformer()),
+                        ('clf', MultiOutputClassifier(RandomForestClassifier()))
+                        ])
+    
+    # parameter set
+    parameters = {'clf__estimator__min_samples_split': [2, 3, 4],
+                  'clf__estimator__n_estimators': [50, 100],
+                  'clf__estimator__criterion': ['entropy', 'gini']
+                 }
+
+    model = GridSearchCV(pipeline, param_grid=parameters)
     
     return model
 
@@ -132,11 +161,33 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 
 def save_model(model, model_filepath):
+
+    '''
+    Save model as a pickle file 
+    
+    Arguments:
+    model: Model to be saved
+    model_filepath: path of the output pick file
+    
+    Return: none, but a pickle file can be saved
+    '''
     
     pickle.dump(model, open(model_filepath, 'wb'))
 
 
 def main():
+
+    """
+    Machine Learning classifier main function. 
+    The main function applies the Machine Learning Pipeline:
+    - Load data from SQLite db
+    - Train ML model on training dataset
+    - Evaluate model performance on testing dataset
+    - Save the model as pickle file
+    """
+
+
+
     if len(sys.argv) == 3:
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
